@@ -7,4 +7,69 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// (Mantenha os mesmos models abaixo: LoveCounter, Message, Memory, Ship, JournalEntry, Greeting, Reason)
+// 1. Contador interativo de amor ("Pensando em você / Te amo")
+model LoveCounter {
+  id        Int      @id @default(1)
+  count     Int      @default(0)
+  updatedAt DateTime @updatedAt
+}
+
+// 2. Mensagens e recadinhos que ela (ou você) pode deixar no site
+model Message {
+  id        String   @id @default(cuid())
+  sender    String   @default("Isadora")
+  content   String
+  createdAt DateTime @default(now())
+}
+
+// 3. Baú de memórias com suporte a fotos e vídeos direto do aparelho
+model Memory {
+  id          String   @id @default(cuid())
+  author      String   @default("Moon") // "Moon" ou "Sunshine"
+  title       String
+  date        String
+  description String
+  mediaUrl    String?  // Foto ou vídeo em base64 / link
+  mediaType   String   @default("image") // "image" ou "video"
+  createdAt   DateTime @default(now())
+}
+
+// 4. O Livro dos Ships Compartilhado (Moon & Sunshine)
+model Ship {
+  id          String   @id @default(cuid())
+  author      String   @default("Moon") // "Moon" ou "Sunshine"
+  shipName    String
+  universe    String?
+  trope       String?
+  whyWeMatch  String
+  quote       String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+}
+
+// 5. Diário de sentimentos e coisas fofas que vimos o outro fazer
+model JournalEntry {
+  id        String   @id @default(cuid())
+  author    String   @default("Moon") // "Moon" ou "Sunshine"
+  title     String
+  content   String
+  category  String   @default("O que vi você fazer") // "O que vi você fazer" ou "Como me senti"
+  createdAt DateTime @default(now())
+}
+
+// 6. Registro rápido de Bom Dia / Boa Noite flutuante
+model Greeting {
+  id        String   @id @default(cuid())
+  type      String   // "bom_dia" ou "boa_noite"
+  sender    String   // "Moon" ou "Sunshine"
+  createdAt DateTime @default(now())
+}
+
+// 7. Seção "Coisas Que Amo em Você" dinâmica e interativa
+model Reason {
+  id          String   @id @default(cuid())
+  author      String   @default("Moon") // "Moon" ou "Sunshine"
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+}
