@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -7,68 +7,4 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Contador interativo de amor ("Pensando em você / Te amo")
-model LoveCounter {
-  id        Int      @id @default(1)
-  count     Int      @default(0)
-  updatedAt DateTime @updatedAt
-}
-
-// Mensagens e recadinhos que ela (ou você) pode deixar
-model Message {
-  id        String   @id @default(cuid())
-  sender    String   @default("Isadora")
-  content   String
-  createdAt DateTime @default(now())
-}
-
-// Baú de memórias com fotos e vídeos direto do aparelho
-model Memory {
-  id          String   @id @default(cuid())
-  author      String   @default("Moon") // "Moon" ou "Sunshine"
-  title       String
-  date        String
-  description String
-  mediaUrl    String?  // Foto ou vídeo em base64 / link
-  mediaType   String   @default("image") // "image" ou "video"
-  createdAt   DateTime @default(now())
-}
-
-// O Livro dos Ships Compartilhado (Moon & Sunshine)
-model Ship {
-  id          String   @id @default(cuid())
-  author      String   @default("Moon") // "Moon" ou "Sunshine"
-  shipName    String
-  universe    String?
-  trope       String?
-  whyWeMatch  String
-  quote       String?
-  imageUrl    String?
-  createdAt   DateTime @default(now())
-}
-
-// Diário de sentimentos e coisas fofas que vimos o outro fazer
-model JournalEntry {
-  id        String   @id @default(cuid())
-  author    String   @default("Moon") // "Moon" ou "Sunshine"
-  title     String
-  content   String
-  category  String   @default("O que vi você fazer") // "O que vi você fazer" ou "Como me senti"
-  createdAt DateTime @default(now())
-}
-
-// Registro rápido de Bom Dia / Boa Noite
-model Greeting {
-  id        String   @id @default(cuid())
-  type      String   // "bom_dia" ou "boa_noite"
-  sender    String   // "Moon" ou "Sunshine"
-  createdAt DateTime @default(now())
-}
-
-model Reason {
-  id          String   @id @default(cuid())
-  author      String   @default("Moon")
-  title       String
-  description String
-  createdAt   DateTime @default(now())
-}
+// (Mantenha os mesmos models abaixo: LoveCounter, Message, Memory, Ship, JournalEntry, Greeting, Reason)
