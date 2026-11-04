@@ -64,3 +64,11 @@ model Greeting {
   sender    String   // "Moon" ou "Sunshine"
   createdAt DateTime @default(now())
 }
+
+model Reason {
+  id          String   @id @default(cuid())
+  author      String   @default("Moon")
+  title       String
+  description String
+  createdAt   DateTime @default(now())
+}
