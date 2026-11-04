@@ -32,26 +32,17 @@ html, body {
 /* ==========================================================
    BARRA DE ROLAGEM ESPACIAL
    ========================================================== */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--space-black);
-}
-
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--space-black); }
 ::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 3px;
   border: 1px solid rgba(56, 189, 248, 0.2);
 }
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(56, 189, 248, 0.4);
-}
+::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.4); }
 
 /* ==========================================================
-   FUNDO CÓSMICO (NEBULOSA DUOTONE: AZUL & VERMELHO)
+   FUNDO CÓSMICO (NEBULOSA DUOTONE)
    ========================================================== */
 .cosmic-void {
   position: fixed;
@@ -62,8 +53,8 @@ html, body {
   z-index: 0;
   pointer-events: none;
   background: 
-    radial-gradient(circle at 85% 15%, rgba(225, 29, 72, 0.12) 0%, transparent 50%), /* Toque rubi do Moon */
-    radial-gradient(ellipse at 15% 85%, rgba(14, 165, 233, 0.16) 0%, transparent 55%), /* Toque azul da Sunshine */
+    radial-gradient(circle at 85% 15%, rgba(225, 29, 72, 0.12) 0%, transparent 50%), 
+    radial-gradient(ellipse at 15% 85%, rgba(14, 165, 233, 0.16) 0%, transparent 55%), 
     radial-gradient(circle at 50% 50%, rgba(2, 5, 14, 0.85) 0%, var(--space-black) 100%);
   animation: nebulaBreath 14s ease-in-out infinite alternate;
 }
@@ -71,6 +62,16 @@ html, body {
 @keyframes nebulaBreath {
   0% { opacity: 0.75; transform: scale(1); }
   100% { opacity: 1; transform: scale(1.06); }
+}
+
+#space-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
 }
 
 /* ==========================================================
@@ -90,30 +91,127 @@ html, body {
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 25px rgba(56, 189, 248, 0.12);
 }
 
-/* Animação suave padrão para troca de abas/slides */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
 .animate-fade-in {
   animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* ==========================================================
-   AJUSTES RESPONSIVOS EXTRAS PARA DISPOSITIVOS MÓVEIS
+   DESIGN DE LIVRO CÓSMICO (CAPA DURA)
+   ========================================================== */
+.book-cover {
+  background: linear-gradient(to right, #090e1f 0%, #0d1633 100%);
+  border: 3px solid rgba(56, 189, 248, 0.3);
+  border-radius: 8px 24px 24px 8px;
+  box-shadow: inset 10px 0 20px rgba(0,0,0,0.6), 0 20px 40px rgba(0,0,0,0.8);
+  position: relative;
+}
+
+.book-spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  background: linear-gradient(to right, #030712 0%, #1e3a8a 40%, #030712 100%);
+  border-right: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px 0 0 6px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+}
+
+.book-page {
+  background: var(--card-bg);
+  margin-left: 28px; /* Espaço para a lombada */
+  border-radius: 0 20px 20px 0;
+  border-left: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ==========================================================
+   DESIGN DE CARTA / ENVELOPE & LACRE DE CERA
+   ========================================================== */
+.envelope-card {
+  background: linear-gradient(135deg, #090e1f 0%, #030712 100%);
+  border: 1px solid rgba(125, 211, 252, 0.3);
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+  overflow: hidden;
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: rgba(15, 23, 42, 0.95);
+  border-bottom: 2px solid rgba(125, 211, 252, 0.4);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  z-index: 10;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: top;
+}
+
+.envelope-flap.open {
+  transform: rotateX(180deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.wax-seal {
+  position: absolute;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle at 30% 30%, #f43f5e 0%, #9f1239 80%);
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.6), inset 0 -3px 6px rgba(0,0,0,0.4);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wax-seal:hover {
+  transform: translateX(-50%) scale(1.1);
+  box-shadow: 0 6px 15px rgba(244, 63, 94, 0.5), inset 0 -3px 6px rgba(0,0,0,0.4);
+}
+
+.wax-seal.broken {
+  transform: translateX(-50%) scale(1.2);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ==========================================================
+   TELA DE CARREGAMENTO (ANIMAÇÕES)
+   ========================================================== */
+@keyframes rainDown {
+  0% { transform: translateY(-20vh) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes fillProgress {
+  0% { width: 0%; }
+  35% { width: 45%; }
+  75% { width: 85%; }
+  100% { width: 100%; }
+}
+
+/* ==========================================================
+   RESPONSIVIDADE
    ========================================================== */
 @media (max-width: 640px) {
-  /* Reduz levemente margens e paddings em celulares menores */
-  .container, main {
-    padding-left: 14px;
-    padding-right: 14px;
-  }
-
-  /* Modais ocupam largura confortável no celular */
-  .glass-card.max-w-md, 
-  .glass-card.max-w-lg {
-    margin: 10px;
-    max-height: 85vh;
-  }
+  .container, main { padding-left: 14px; padding-right: 14px; }
+  .glass-card.max-w-md, .glass-card.max-w-lg { margin: 10px; max-height: 85vh; }
 }

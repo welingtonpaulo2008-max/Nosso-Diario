@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { ChevronLeft, ChevronRight, Music } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { ChevronLeft, ChevronRight, Music, Play, Pause } from "lucide-react";
 
 const trackIds = [
   "1De425SCFJULIHbcmeebUw",
@@ -25,20 +25,38 @@ const trackIds = [
 
 export default function MusicCarousel() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
+
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % trackIds.length);
+  }, []);
 
   const prevSlide = () => {
+    setIsAutoPlay(false); // Pausa o autoplay ao interagir manualmente
     setCurrentSlide((prev) => (prev - 1 + trackIds.length) % trackIds.length);
   };
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % trackIds.length);
+  const handleManualSelect = (index: number) => {
+    setIsAutoPlay(false); // Pausa o autoplay ao clicar nas bolinhas
+    setCurrentSlide(index);
   };
+
+  // Efeito de Autoplay Inteligente (avança a cada 12 segundos se ativado)
+  useEffect(() => {
+    if (!isAutoPlay) return;
+
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 12000);
+
+    return () => clearInterval(timer);
+  }, [isAutoPlay, nextSlide]);
 
   return (
     <section className="my-16">
       {/* Cabeçalho */}
       <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/30 text-accent-blue text-xs tracking-widest uppercase mb-3">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-sky-400/30 text-accent-blue text-xs tracking-widest uppercase mb-3">
           <Music className="w-3.5 h-3.5" /> Nossa Trilha Sonora
         </div>
         <h2 className="font-serif text-2xl md:text-3xl text-slate-100 tracking-wide mb-2">
@@ -53,9 +71,25 @@ export default function MusicCarousel() {
       <div className="glass-card rounded-3xl p-5 md:p-7 max-w-2xl mx-auto">
         {/* Barra Superior */}
         <div className="flex items-center justify-between mb-4 px-1">
-          <span className="text-xs font-semibold uppercase tracking-wider text-accent-blue">
-            Faixa {currentSlide + 1} de {trackIds.length}
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-accent-blue">
+              Faixa {currentSlide + 1} de {trackIds.length}
+            </span>
+            {/* Indicador de Autoplay */}
+            <button
+              onClick={() => setIsAutoPlay(!isAutoPlay)}
+              title={isAutoPlay ? "Autoplay ligado (Clique para pausar)" : "Autoplay pausado (Clique para ativar)"}
+              className={`flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium border transition-all cursor-pointer ${
+                isAutoPlay
+                  ? "bg-sky-500/15 border-sky-400/40 text-cyan-glow"
+                  : "bg-slate-900 border-white/10 text-slate-400"
+              }`}
+            >
+              {isAutoPlay ? <Play className="w-2.5 h-2.5 fill-current" /> : <Pause className="w-2.5 h-2.5" />}
+              {isAutoPlay ? "Modo Contínuo" : "Manual"}
+            </button>
+          </div>
+
           <div className="flex gap-2">
             <button
               onClick={prevSlide}
@@ -65,7 +99,10 @@ export default function MusicCarousel() {
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
-              onClick={nextSlide}
+              onClick={() => {
+                setIsAutoPlay(false);
+                nextSlide();
+              }}
               title="Próxima Faixa"
               className="w-9 h-9 rounded-full bg-slate-950/70 border border-sky-400/30 text-accent-blue flex items-center justify-center transition-all hover:bg-sky-500/20 hover:border-cyan-glow hover:scale-105 active:scale-95 cursor-pointer"
             >
@@ -89,12 +126,12 @@ export default function MusicCarousel() {
           />
         </div>
 
-        {/* Bolinhas Indicadoras (com quebra inteligente de linha) */}
+        {/* Bolinhas Indicadoras Interativas */}
         <div className="flex justify-center flex-wrap gap-2 mt-5 max-w-sm mx-auto">
           {trackIds.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentSlide(index)}
+              onClick={() => handleManualSelect(index)}
               className={`h-2 rounded-full transition-all duration-300 cursor-pointer ${
                 index === currentSlide
                   ? "w-6 bg-cyan-glow shadow-[0_0_8px_#38bdf8]"

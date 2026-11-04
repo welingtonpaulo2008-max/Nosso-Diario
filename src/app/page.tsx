@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Chronometer from "@/components/Chronometer";
 import Timeline from "@/components/Timeline";
 import Reasons from "@/components/Reasons";
@@ -8,8 +11,11 @@ import LoveCounter from "@/components/LoveCounter";
 import GuestMessage from "@/components/GuestMessage";
 import MusicCarousel from "@/components/MusicCarousel";
 import FloatingGreeting from "@/components/FloatingGreeting";
+import FloatingNav from "@/components/FloatingNav";
 
 export default function Home() {
+  const [isLetterOpen, setIsLetterOpen] = useState(false);
+
   const declarations = [
     {
       quote: "Você é o meu primeiro pensamento bom do dia e a minha paz antes de dormir.",
@@ -26,9 +32,11 @@ export default function Home() {
   ];
 
   return (
-    <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12 md:py-20">
-      {/* Botão Flutuante de Bom Dia e Boa Noite no Canto */}
+    <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12 md:py-20 pb-32">
+      
+      {/* Botões e Navegação Flutuante */}
       <FloatingGreeting />
+      <FloatingNav />
 
       {/* Cabeçalho */}
       <header className="text-center mb-12 animate-fade-in">
@@ -48,20 +56,24 @@ export default function Home() {
         </p>
       </header>
 
-      {/* 1. Cronômetro Duplo (29 de Abril & 09 de Fevereiro) */}
+      {/* 1. Cronômetro Duplo */}
       <Chronometer />
 
       {/* 2. Linha do Tempo */}
       <Timeline />
 
-      {/* 3. Nosso Diário Íntimo (Novo!) */}
-      <SharedJournal />
+      {/* 3. Nosso Diário Íntimo */}
+      <div id="secao-diario">
+        <SharedJournal />
+      </div>
 
       {/* 4. Coisas Que Amo Em Você */}
       <Reasons />
 
-      {/* 5. O Livro dos Nossos Ships (Moon & Sunshine Compartilhado) */}
-      <Ships />
+      {/* 5. O Livro dos Nossos Ships */}
+      <div id="secao-livro">
+        <Ships />
+      </div>
 
       {/* 6. Coisas Que Sempre Quero Te Dizer (Declarações) */}
       <section className="my-16">
@@ -97,38 +109,80 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 7. Nosso Baú de Memórias (Com fotos e vídeos) */}
-      <Memories />
+      {/* 7. Nosso Baú de Memórias */}
+      <div id="secao-memorias">
+        <Memories />
+      </div>
 
-      {/* 8. Botão Interativo de Carinho (Confetes + Backend) */}
+      {/* 8. Botão Interativo de Carinho */}
       <LoveCounter />
 
-      {/* 9. Caixa Para Ela Enviar Recados (Backend) */}
+      {/* 9. Caixa Para Ela Enviar Recados */}
       <GuestMessage />
 
       {/* 10. Trilha Sonora com as 17 Faixas do Spotify */}
-      <MusicCarousel />
+      <div id="secao-musicas">
+        <MusicCarousel />
+      </div>
 
-      {/* 11. Carta Romântica Final */}
-      <section className="glass-card rounded-3xl p-8 md:p-12 text-center my-16 bg-gradient-to-br from-blue-950/30 via-slate-900/80 to-slate-950 border border-sky-400/25">
-        <p className="text-sm md:text-base text-slate-200 italic leading-relaxed mb-6 max-w-2xl mx-auto font-light">
-          &ldquo;Cada segundo ao seu lado é uma certeza a mais de que o amor verdadeiro existe. Você
-          é e sempre será a minha Rosa Azul — rara, preciosa e a mulher da minha vida.&rdquo;
-        </p>
-        <span className="font-serif text-base md:text-lg text-accent-blue font-semibold tracking-wider">
-          Com todo o meu amor, do seu Moon 🌙
-        </span>
+      {/* 11. Carta Romântica com Envelope e Lacre de Cera */}
+      <section className="my-16 max-w-2xl mx-auto relative pt-8">
+        <div className="text-center mb-8">
+          <h2 className="font-serif text-2xl md:text-3xl text-slate-100 tracking-wide mb-2">
+            Uma Carta Para Você
+          </h2>
+          <p className="text-xs md:text-sm text-slate-400 italic">
+            Toque no lacre de cera para abrir a mensagem 💌
+          </p>
+        </div>
+
+        {/* Envelope e Carta */}
+        <div className="envelope-card min-h-[300px] flex flex-col items-center justify-center p-8 relative">
+          
+          {/* Aba do Envelope (abre quando clica) */}
+          <div className={`envelope-flap ${isLetterOpen ? "open" : ""}`} />
+
+          {/* Lacre de Cera Rubi */}
+          <div
+            onClick={() => setIsLetterOpen(true)}
+            className={`wax-seal ${isLetterOpen ? "broken" : ""}`}
+            title="Quebrar o lacre"
+          >
+            🌙
+          </div>
+
+          {/* Conteúdo da Carta (Revelado quando abre) */}
+          <div
+            className={`transition-all duration-700 ease-out z-0 w-full text-center ${
+              isLetterOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+            }`}
+          >
+            <p className="text-sm md:text-base text-slate-200 italic leading-relaxed mb-8 font-light">
+              &ldquo;Cada segundo ao seu lado é uma certeza a mais de que o amor verdadeiro existe. Você
+              é e sempre será a minha Rosa Azul — rara, preciosa e a mulher da minha vida.&rdquo;
+            </p>
+            
+            <span className="font-serif text-base md:text-lg text-accent-blue font-semibold tracking-wider block mb-6">
+              Com todo o meu amor, do seu Moon 🌙
+            </span>
+
+            {/* Botão para Guardar a Carta Novamente */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsLetterOpen(false);
+              }}
+              className="text-[10px] text-slate-500 hover:text-white uppercase tracking-widest border-b border-slate-700 hover:border-white transition-colors cursor-pointer"
+            >
+              Guardar Carta
+            </button>
+          </div>
+        </div>
       </section>
 
       {/* Rodapé Discreto */}
-      <footer className="text-center text-xs text-slate-600 mt-16 mb-6">
+      <footer className="text-center text-xs text-slate-600 mt-16 mb-6 relative z-10">
         <p>Feito por Welington (Moon) para Isadora (Sunshine) • 2026</p>
-        <a
-          href="/admin"
-          className="text-slate-700 hover:text-slate-400 transition-colors text-[10px] mt-2 inline-block"
-        >
-          Acesso Restrito
-        </a>
       </footer>
     </main>
   );

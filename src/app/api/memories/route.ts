@@ -15,7 +15,8 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { author, title, date, description, mediaUrl, mediaType } = await req.json();
+    const body = await req.json();
+    const { author, title, date, description, mediaUrl, mediaType } = body;
 
     if (!title || !description) {
       return NextResponse.json({ error: "Título e descrição são obrigatórios" }, { status: 400 });
@@ -41,7 +42,8 @@ export async function POST(req: Request) {
 
 export async function PUT(req: Request) {
   try {
-    const { id, author, title, date, description, mediaUrl, mediaType } = await req.json();
+    const body = await req.json();
+    const { id, author, title, date, description, mediaUrl, mediaType } = body;
 
     if (!id || !title || !description) {
       return NextResponse.json({ error: "Dados incompletos para edição" }, { status: 400 });

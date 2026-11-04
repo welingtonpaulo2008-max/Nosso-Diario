@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { Bell, X, Sparkles, Heart } from "lucide-react";
 
 interface Reminder {
   icon: string;
@@ -48,68 +48,85 @@ const reminders: Reminder[] = [
 ];
 
 export default function Notifications() {
-  const [currentReminder, setCurrentReminder] = useState<Reminder | null>(null);
-  const [lastIndex, setLastIndex] = useState<number>(-1);
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentReminder, setCurrentReminder] = useState<Reminder>(reminders[0]);
+  const [hasUnread, setHasUnread] = useState(false);
+  const [lastIndex, setLastIndex] = useState(0);
 
+  // Troca de lembrete periodicamente em segundo plano
   useEffect(() => {
-    let hideTimer: NodeJS.Timeout;
-    let nextTimer: NodeJS.Timeout;
-
-    const showNotification = () => {
-      let newIndex: number;
+    const interval = setInterval(() => {
+      let newIndex;
       do {
         newIndex = Math.floor(Math.random() * reminders.length);
       } while (newIndex === lastIndex);
 
       setLastIndex(newIndex);
       setCurrentReminder(reminders[newIndex]);
+      setHasUnread(true); // Acende o alerta no sininho
+    }, 18000); // A cada 18 segundos um novo lembrete sutil chega
 
-      // Permanece visível por 5.5s
-      hideTimer = setTimeout(() => {
-        setCurrentReminder(null);
-
-        // Aguarda entre 9 e 14s para mostrar a próxima
-        const delay = Math.random() * 5000 + 9000;
-        nextTimer = setTimeout(showNotification, delay);
-      }, 5500);
-    };
-
-    // Primeira notificação aparece após 3.5 segundos
-    const initialTimer = setTimeout(showNotification, 3500);
-
-    return () => {
-      clearTimeout(initialTimer);
-      clearTimeout(hideTimer);
-      clearTimeout(nextTimer);
-    };
+    return () => clearInterval(interval);
   }, [lastIndex]);
 
+  const handleOpen = () => {
+    setIsOpen(!isOpen);
+    if (!isOpen) {
+      setHasUnread(false); // Limpa o alerta ao abrir
+    }
+  };
+
   return (
-    <div className="fixed top-4 right-4 left-4 md:left-auto md:w-96 z-[9999] pointer-events-none">
-      <AnimatePresence>
-        {currentReminder && (
-          <motion.div
-            initial={{ opacity: 0, y: -40, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 350, damping: 25 }}
-            className="pointer-events-auto flex items-start gap-3.5 rounded-2xl border border-sky-400/35 bg-slate-950/85 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.8),0_0_20px_rgba(56,189,248,0.2)] backdrop-blur-xl"
-          >
-            <span className="text-2xl pt-0.5">{currentReminder.icon}</span>
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-semibold tracking-wider uppercase text-accent-blue">
-                  {currentReminder.title}
-                </span>
-                <span className="text-[10px] text-slate-400">Agora</span>
-              </div>
-              <p className="text-xs md:text-sm text-slate-200 leading-relaxed font-normal">
-                {currentReminder.text}
-              </p>
-            </div>
-          </motion.div>
+    <div className="fixed top-4 right-4 z-[9990] flex flex-col items-end">
+      {/* Botão do Sininho Discreto */}
+      <button
+        onClick={handleOpen}
+        className="relative flex items-center justify-center w-11 h-11 rounded-full bg-slate-950/85 border border-sky-400/40 text-accent-blue shadow-[0_0_20px_rgba(56,189,248,0.25)] hover:border-cyan-glow hover:scale-105 transition-all backdrop-blur-xl cursor-pointer"
+        title="Lembretes do Universo"
+      >
+        <Bell className="w-5 h-5" />
+        
+        {/* Ponto indicador de nova mensagem */}
+        {hasUnread && (
+          <span className="absolute top-2 right-2 w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_8px_#f43f5e] animate-ping" />
         )}
-      </AnimatePresence>
+        {hasUnread && (
+          <span className="absolute top-2 right-2 w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_8px_#f43f5e]" />
+        )}
+      </button>
+
+      {/* Caixa de Notificação Recolhível */}
+      {isOpen && (
+        <div className="mt-2 w-80 sm:w-96 glass-card rounded-2xl p-4 border border-sky-400/30 shadow-2xl backdrop-blur-2xl animate-fade-in relative">
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute top-3 right-3 text-slate-400 hover:text-white cursor-pointer"
+          >
+            <X className="w-4 h-4" />
+          </button>
+
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-xl">{currentReminder.icon}</span>
+            <div>
+              <span className="text-[10px] font-semibold tracking-wider uppercase text-accent-blue block">
+                {currentReminder.title}
+              </span>
+              <span className="text-[9px] text-slate-500">Enviado pelo Destino</span>
+            </div>
+          </div>
+
+          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-light mt-2 bg-slate-950/40 p-3 rounded-xl border border-white/5">
+            &ldquo;{currentReminder.text}&rdquo;
+          </p>
+
+          <div className="mt-3 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] text-slate-400">
+            <span className="flex items-center gap-1">
+              <Heart className="w-3 h-3 text-rose-400 fill-rose-400" /> Para a minha Rosa Azul
+            </span>
+            <span className="text-accent-blue italic">Toque no X para fechar</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
