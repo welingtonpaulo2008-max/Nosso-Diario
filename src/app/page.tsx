@@ -1,8 +1,6 @@
 "use client";
 
 import { useState } from "react";
-// Importando o novo Banner Mágico! ✨
-import AnniversaryBanner from "@/components/AnniversaryBanner";
 import Chronometer from "@/components/Chronometer";
 import Timeline from "@/components/Timeline";
 import Reasons from "@/components/Reasons";
@@ -14,6 +12,7 @@ import GuestMessage from "@/components/GuestMessage";
 import MusicCarousel from "@/components/MusicCarousel";
 import FloatingGreeting from "@/components/FloatingGreeting";
 import FloatingNav from "@/components/FloatingNav";
+import AnniversaryBanner from "@/components/AnniversaryBanner";
 
 export default function Home() {
   const [isLetterOpen, setIsLetterOpen] = useState(false);
@@ -34,23 +33,23 @@ export default function Home() {
   ];
 
   return (
-    <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12 md:py-20 pb-32">
+    <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-10 md:py-16 pb-32">
       
       {/* Botões e Navegação Flutuante */}
       <FloatingGreeting />
       <FloatingNav />
 
-      {/* 🌟 BANNER DE COMEMORAÇÃO MÊS A MÊS NO TOPO! 🌟 */}
+      {/* 🎉 BANNER DE COMEMORAÇÃO DOS MESES NO TOPO! */}
       <AnniversaryBanner />
 
       {/* Cabeçalho */}
       <header className="text-center mb-12 animate-fade-in">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/30 text-accent-blue text-xs uppercase tracking-widest mb-4 shadow-[0_0_15px_rgba(56,189,248,0.15)]">
-          <span className="animate-spin-slow">✦</span> Para Minha Vida • ❤ 
+          <span className="animate-spin-slow">✦</span> Nosso Diário meu Amorzinho • 2026
         </div>
 
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide bg-gradient-to-b from-white via-sky-100 to-sky-300 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(56,189,248,0.25)] mb-3">
-          Isadora Deguchi & Welington de Paulo
+          Isadora Martins Deguchi & Welington
         </h1>
 
         <p className="text-sm md:text-base text-slate-400 italic">
@@ -61,7 +60,7 @@ export default function Home() {
         </p>
       </header>
 
-      {/* 1. Cronômetro Duplo */}
+      {/* 1. Cronômetro Duplo (29 de Abril & 09 de Fevereiro) */}
       <Chronometer />
 
       {/* 2. Linha do Tempo */}
@@ -141,13 +140,9 @@ export default function Home() {
           </p>
         </div>
 
-        {/* Envelope e Carta */}
         <div className="envelope-card min-h-[300px] flex flex-col items-center justify-center p-8 relative">
-          
-          {/* Aba do Envelope (abre quando clica) */}
           <div className={`envelope-flap ${isLetterOpen ? "open" : ""}`} />
 
-          {/* Lacre de Cera Rubi */}
           <div
             onClick={() => setIsLetterOpen(true)}
             className={`wax-seal ${isLetterOpen ? "broken" : ""}`}
@@ -156,7 +151,6 @@ export default function Home() {
             🌙
           </div>
 
-          {/* Conteúdo da Carta (Revelado quando abre) */}
           <div
             className={`transition-all duration-700 ease-out z-0 w-full text-center ${
               isLetterOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
@@ -171,7 +165,6 @@ export default function Home() {
               Com todo o meu amor, do seu Moon 🌙
             </span>
 
-            {/* Botão para Guardar a Carta Novamente */}
             <button
               onClick={(e) => {
                 e.stopPropagation();

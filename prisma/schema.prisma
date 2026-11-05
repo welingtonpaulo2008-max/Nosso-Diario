@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -9,14 +9,14 @@ generator client {
 
 // 1. Contador interativo de amor ("Pensando em você / Te amo")
 model LoveCounter {
-  id        Int      @id @default(1)
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   count     Int      @default(0)
   updatedAt DateTime @updatedAt
 }
 
 // 2. Mensagens e recadinhos que ela (ou você) pode deixar no site
 model Message {
-  id        String   @id @default(cuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   sender    String   @default("Isadora")
   content   String
   createdAt DateTime @default(now())
@@ -24,19 +24,19 @@ model Message {
 
 // 3. Baú de memórias com suporte a fotos e vídeos direto do aparelho
 model Memory {
-  id          String   @id @default(cuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   author      String   @default("Moon") // "Moon" ou "Sunshine"
   title       String
   date        String
   description String
-  mediaUrl    String?  // Foto ou vídeo em base64 / link
+  mediaUrl    String?
   mediaType   String   @default("image") // "image" ou "video"
   createdAt   DateTime @default(now())
 }
 
 // 4. O Livro dos Ships Compartilhado (Moon & Sunshine)
 model Ship {
-  id          String   @id @default(cuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   author      String   @default("Moon") // "Moon" ou "Sunshine"
   shipName    String
   universe    String?
@@ -49,17 +49,17 @@ model Ship {
 
 // 5. Diário de sentimentos e coisas fofas que vimos o outro fazer
 model JournalEntry {
-  id        String   @id @default(cuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   author    String   @default("Moon") // "Moon" ou "Sunshine"
   title     String
   content   String
-  category  String   @default("O que vi você fazer") // "O que vi você fazer" ou "Como me senti"
+  category  String   @default("O que vi você fazer")
   createdAt DateTime @default(now())
 }
 
 // 6. Registro rápido de Bom Dia / Boa Noite flutuante
 model Greeting {
-  id        String   @id @default(cuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   type      String   // "bom_dia" ou "boa_noite"
   sender    String   // "Moon" ou "Sunshine"
   createdAt DateTime @default(now())
@@ -67,7 +67,7 @@ model Greeting {
 
 // 7. Seção "Coisas Que Amo em Você" dinâmica e interativa
 model Reason {
-  id          String   @id @default(cuid())
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   author      String   @default("Moon") // "Moon" ou "Sunshine"
   title       String
   description String
