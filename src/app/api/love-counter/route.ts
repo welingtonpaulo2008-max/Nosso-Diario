@@ -3,13 +3,11 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    let counter = await prisma.loveCounter.findUnique({
-      where: { id: 1 },
-    });
+    let counter = await prisma.loveCounter.findFirst();
 
     if (!counter) {
       counter = await prisma.loveCounter.create({
-        data: { id: 1, count: 0 },
+        data: { count: 0 },
       });
     }
 
@@ -22,11 +20,18 @@ export async function GET() {
 
 export async function POST() {
   try {
-    const counter = await prisma.loveCounter.upsert({
-      where: { id: 1 },
-      update: { count: { increment: 1 } },
-      create: { id: 1, count: 1 },
-    });
+    let counter = await prisma.loveCounter.findFirst();
+
+    if (!counter) {
+      counter = await prisma.loveCounter.create({
+        data: { count: 1 },
+      });
+    } else {
+      counter = await prisma.loveCounter.update({
+        where: { id: counter.id },
+        data: { count: { increment: 1 } },
+      });
+    }
 
     return NextResponse.json({ count: counter.count });
   } catch (error) {
