@@ -2,21 +2,27 @@ export default function Timeline() {
   const events = [
     {
       date: "09 de Fevereiro de 2026",
-      title: "A Declaração",
+      title: "Declaração do Meu Amor",
       description:
-        "O dia em que as palavras saíram do peito. Quando eu admiti para o mundo (e pra você) que o meu coração já pertencia completamente à minha princesinha.",
+        "Esse foi o dia em que meus sentimentos afloraram e venceram todos os medos. Com toda a vergonha e timidez do mundo kkkkkk finalmente admiti meu amor diante de todos. E, então, o inesperado aconteceu: você o aceitou e me mostrou que esse sentimento era recíproco.",
     },
     {
       date: "29 de Abril de 2026",
-      title: "O Pedido Oficial",
+      title: "Nosso Compromisso de Amor",
       description:
-        "O momento em que o sentimento virou compromisso e certeza. Foi onde demos as mãos para construir o nosso universo juntos.",
+        "Naquele momento, eu já sabia que você era a pessoa certa, que me amava e que não queria me perder. Literalmente dois meses depois, tivemos a certeza de que queríamos estar juntos e, ali, dois meses depois kkkkk eu te pedi em namoro. Você deixou de ser apenas um sentimento e se tornou uma certeza. Naquele instante, você me tornou um dos homens mais felizes do mundo.",
+    },
+    {
+      date: "13 de Junho de 2026",
+      title: "Primeiro Dia dos Namorados e Copa Juntos",
+      description:
+        "NOSSO PRIMEIRO DIA DOS NAMORADOS JUNTOS!! E, para completar, ainda tivemos a oportunidade de assistir à Copa do Mundo juntos. Foi um dia em que pudemos dedicar nosso tempo inteiramente um ao outro. Esse momento ficou marcado em mim, pois foi a primeira vez que pude ter você tão pertinho, te conhecer ainda mais de perto e enxergar, de verdade, cada detalhe seu. Ver a sua felicidade, o brilho nos seus olhos e o quanto você estava feliz me encantava de uma forma inexplicável. Sua alegria sempre teve um efeito enorme sobre mim, e poder vivenciar tudo aquilo ao seu lado tornou aquele dia ainda mais especial.",
     },
     {
       date: "O Presente & O Futuro",
-      title: "A Cada Dia Mais Certeza",
+      title: "Uma Historia de Certeza",
       description:
-        "Tudo o que passamos só mostrou que a nossa ligação é única. Meu coração continua escolhendo você a cada nascer do sol, minha Rosa Azul.",
+        "Cada momento que passamos juntos é uma prova de que nosso amor é verdadeiro e duradouro. Cada riso compartilhado, cada abraço apertado e cada olhar trocado fortalece nossa conexão. Estamos construindo uma história de amor baseada na confiança, no respeito e na cumplicidade. E, olhando para o futuro, sei que continuaremos a escrever capítulos incríveis juntos, enfrentando desafios e celebrando conquistas lado a lado. Aqui te confirmo que você não é só apenas um sentimento e compromisso, mas meu Mundo!!",
     },
   ];
 

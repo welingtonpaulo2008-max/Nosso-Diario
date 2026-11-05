@@ -34,12 +34,55 @@ export default function AdminPage() {
   const [imageUrl, setImageUrl] = useState("");
   const [loadingAction, setLoadingAction] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await fetch("/api/admin");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated) {
+            setIsAuth(true);
+            const loaded = await loadDashboardData();
+            if (!loaded) {
+              setIsAuth(false);
+            }
+          }
+        }
+      } catch {
+        setAuthError("Erro ao verificar sessão do painel.");
+      }
+    };
+
+    checkSession();
+  }, []);
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!password) return;
 
-    // Tenta carregar as mensagens para validar
-    loadDashboardData();
+    try {
+      const res = await fetch("/api/admin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setAuthError(data.error || "Senha incorreta.");
+        return;
+      }
+
+      const loaded = await loadDashboardData();
+      if (!loaded) {
+        return;
+      }
+
+      setIsAuth(true);
+      setAuthError("");
+    } catch {
+      setAuthError("Erro ao autenticar no painel.");
+    }
   };
 
   const loadDashboardData = async () => {
@@ -54,11 +97,14 @@ export default function AdminPage() {
         const memData = await memRes.json();
         setMessages(msgData);
         setMemories(memData);
-        setIsAuth(true);
-        setAuthError("");
+        return true;
       }
+
+      setAuthError("Erro ao carregar dados do painel.");
+      return false;
     } catch {
       setAuthError("Erro ao carregar dados do painel.");
+      return false;
     }
   };
 
@@ -85,9 +131,10 @@ export default function AdminPage() {
         setDate("");
         setDescription("");
         setImageUrl("");
-        loadDashboardData();
+        await loadDashboardData();
       } else {
-        alert("Senha incorreta ou erro ao salvar.");
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Senha incorreta ou erro ao salvar.");
       }
     } catch (err) {
       console.error(err);
@@ -107,13 +154,23 @@ export default function AdminPage() {
       });
 
       if (res.ok) {
-        loadDashboardData();
+        await loadDashboardData();
       } else {
-        alert("Erro ao excluir memória.");
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || "Erro ao excluir memória.");
       }
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleLogout = async () => {
+    await fetch("/api/admin", { method: "DELETE" });
+    setPassword("");
+    setIsAuth(false);
+    setMessages([]);
+    setMemories([]);
+    setAuthError("");
   };
 
   if (!isAuth) {
@@ -170,12 +227,21 @@ export default function AdminPage() {
           </h1>
           <p className="text-xs text-slate-400">Gerencie as memórias e leia os recados da Isadora</p>
         </div>
-        <Link
-          href="/"
-          className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 border border-sky-400/20 text-xs text-accent-blue hover:text-white"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" /> Ir para o Site
-        </Link>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 border border-sky-400/20 text-xs text-slate-300 hover:text-white"
+          >
+            Sair
+          </button>
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-900 border border-sky-400/20 text-xs text-accent-blue hover:text-white"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" /> Ir para o Site
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

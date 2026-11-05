@@ -19,7 +19,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Nosso Diário meu Amorzinho 💙",
+  title: "Para Minha Vida • 💙🤍🤍",
   description: "Isadora & Welington (Moon & Sunshine) • 2026",
   icons: {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💙</text></svg>",

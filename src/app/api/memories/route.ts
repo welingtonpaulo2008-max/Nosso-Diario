@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isValidAdminRequest } from "@/lib/admin-auth";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
@@ -16,10 +17,15 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { author, title, date, description, mediaUrl, mediaType } = body;
+    const { author, title, date, description, mediaUrl, mediaType, password } = body;
 
     if (!title || !description) {
       return NextResponse.json({ error: "Título e descrição são obrigatórios" }, { status: 400 });
+    }
+
+    const shouldRequireAdmin = typeof password === "string" || (await isValidAdminRequest());
+    if (shouldRequireAdmin && !(await isValidAdminRequest(password ?? null))) {
+      return NextResponse.json({ error: "Senha de administrador incorreta." }, { status: 401 });
     }
 
     const newMemory = await prisma.memory.create({
@@ -43,10 +49,15 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { id, author, title, date, description, mediaUrl, mediaType } = body;
+    const { id, author, title, date, description, mediaUrl, mediaType, password } = body;
 
     if (!id || !title || !description) {
       return NextResponse.json({ error: "Dados incompletos para edição" }, { status: 400 });
+    }
+
+    const shouldRequireAdmin = typeof password === "string" || (await isValidAdminRequest());
+    if (shouldRequireAdmin && !(await isValidAdminRequest(password ?? null))) {
+      return NextResponse.json({ error: "Senha de administrador incorreta." }, { status: 401 });
     }
 
     const updatedMemory = await prisma.memory.update({
@@ -70,8 +81,13 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const { id } = await req.json();
+    const { id, password } = await req.json();
     if (!id) return NextResponse.json({ error: "ID obrigatório" }, { status: 400 });
+
+    const shouldRequireAdmin = typeof password === "string" || (await isValidAdminRequest());
+    if (shouldRequireAdmin && !(await isValidAdminRequest(password ?? null))) {
+      return NextResponse.json({ error: "Senha de administrador incorreta." }, { status: 401 });
+    }
 
     await prisma.memory.delete({ where: { id } });
     return NextResponse.json({ success: true });

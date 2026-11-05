@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+// Importando o novo Banner Mágico! ✨
+import AnniversaryBanner from "@/components/AnniversaryBanner";
 import Chronometer from "@/components/Chronometer";
 import Timeline from "@/components/Timeline";
 import Reasons from "@/components/Reasons";
@@ -38,10 +40,13 @@ export default function Home() {
       <FloatingGreeting />
       <FloatingNav />
 
+      {/* 🌟 BANNER DE COMEMORAÇÃO MÊS A MÊS NO TOPO! 🌟 */}
+      <AnniversaryBanner />
+
       {/* Cabeçalho */}
       <header className="text-center mb-12 animate-fade-in">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/30 text-accent-blue text-xs uppercase tracking-widest mb-4 shadow-[0_0_15px_rgba(56,189,248,0.15)]">
-          <span className="animate-spin-slow">✦</span> Nosso Diário meu Amorzinho • 2026
+          <span className="animate-spin-slow">✦</span> Para Minha Vida • ❤ 
         </div>
 
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide bg-gradient-to-b from-white via-sky-100 to-sky-300 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(56,189,248,0.25)] mb-3">
@@ -183,6 +188,12 @@ export default function Home() {
       {/* Rodapé Discreto */}
       <footer className="text-center text-xs text-slate-600 mt-16 mb-6 relative z-10">
         <p>Feito por Welington (Moon) para Isadora (Sunshine) • 2026</p>
+        <a
+          href="/admin"
+          className="text-slate-700 hover:text-slate-400 transition-colors text-[10px] mt-2 inline-block"
+        >
+          Acesso Restrito
+        </a>
       </footer>
     </main>
   );
